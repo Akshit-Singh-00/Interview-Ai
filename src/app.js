@@ -1,11 +1,14 @@
 const express = require("express");
 
+const cookieParser=require('cookie-parser')
+
 const app = express();
+app.use(cookieParser)
 
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.send("API is working 🚀");
+    res.send("API is working ");
 });
 
 // require all the routes here
