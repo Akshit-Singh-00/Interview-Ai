@@ -8,4 +8,11 @@ app.get("/", (req, res) => {
     res.send("API is working 🚀");
 });
 
+// require all the routes here
+const authRouter=require('./routes/auth.routes')
+
+
+// using all the routes here
+app.use("/api/auth",authRouter)
+
 module.exports = app;
