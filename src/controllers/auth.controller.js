@@ -95,6 +95,7 @@ async function loginUserController(req, res) {
     });
 }
 
+
 async function logoutUserContoller(req,res) {
     const token =req.cookies.token
     if(token){
@@ -106,8 +107,25 @@ async function logoutUserContoller(req,res) {
     })
 }
 
+async function getMeContoller(req, res) {
+
+    console.log(req.user);
+
+    const user = await userModel.findById(req.user.id);
+
+    res.status(200).json({
+        message: "User detail fetched successfully",
+        user: {
+            _id: user._id,
+            username: user.username,
+            email: user.email
+        }
+    });
+}
+
 module.exports = {
     registerUserController,
     loginUserController,
-    logoutUserContoller
+    logoutUserContoller,
+    getMeContoller
 };
