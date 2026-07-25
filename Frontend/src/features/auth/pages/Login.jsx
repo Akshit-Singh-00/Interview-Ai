@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import "../auth.form.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
     const { loading, handleLogin } = useAuth();
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -19,13 +20,15 @@ const Login = () => {
             });
 
             console.log("Login successful");
+
+            // Redirect only after successful login
+            navigate("/home");
         } catch (err) {
             console.error(err);
+            alert(err.response?.data?.message || "Login failed");
         }
     };
-     if(loading){
-        return (<main><h1>Loading...</h1></main>)
-     }
+
     return (
         <main>
             <div className="form-container">
@@ -53,7 +56,7 @@ const Login = () => {
                             type="password"
                             id="password"
                             name="password"
-                            placeholder="Enter password"
+                            placeholder="Enter your password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -61,6 +64,7 @@ const Login = () => {
                     </div>
 
                     <button
+                        type="submit"
                         className="button primary-button"
                         disabled={loading}
                     >
