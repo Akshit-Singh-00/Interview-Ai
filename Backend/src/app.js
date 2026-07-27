@@ -1,21 +1,26 @@
 const express = require("express");
-
-const cookieParser=require('cookie-parser')
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const app = express();
-app.use(cookieParser())
 
+app.use(cookieParser());
 app.use(express.json());
 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
 app.get("/", (req, res) => {
-    res.send("API is working ");
+  res.send("API is working");
 });
 
-// require all the routes here
-const authRouter=require('./routes/auth.routes')
+// Routes
+const authRouter = require("./routes/auth.routes");
 
-
-// using all the routes here
-app.use("/api/auth",authRouter)
+app.use("/api/auth", authRouter);
 
 module.exports = app;
