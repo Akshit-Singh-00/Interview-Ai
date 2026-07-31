@@ -1,5 +1,4 @@
 const { GoogleGenAI } = require("@google/genai");
-
 const { z } = require("zod");
 const { zodToJsonSchema } = require("zod-to-json-schema");
 
@@ -37,17 +36,17 @@ const interviewReportSchema = z.object({
 
                 intention: z
                     .string()
-                    .describe("The intention of the interviewer behind asking this question "),
+                    .describe("The intention of the interviewer behind asking this question"),
 
                 answer: z
                     .string()
                     .describe(
-                        "how to anser this question , what points to cover , what approcah to take etc."
+                        "How to answer this question, what points to cover and what approach to take."
                     ),
             })
         )
         .describe(
-            "Behavioral questions that can be asked in the interview along with their intentions and how to answer them "
+            "Technical questions that can be asked in the interview along with their intentions and how to answer them."
         ),
 
     behavioralQuestions: z
@@ -55,21 +54,21 @@ const interviewReportSchema = z.object({
             z.object({
                 question: z
                     .string()
-                    .describe("The behavirol question can be asked in interview"),
+                    .describe("The behavioral question that can be asked in the interview"),
 
                 intention: z
                     .string()
-                    .describe("The intention of the interviewer behind asking this question "),
+                    .describe("The intention of the interviewer behind asking this question"),
 
                 answer: z
                     .string()
                     .describe(
-                        "how to anser this question , what points to cover , what approcah to take etc."
+                        "How to answer this question, what points to cover and what approach to take."
                     ),
             })
         )
         .describe(
-            "Behavioral questions that can be asked in the interview along with their intentions and how to answer them "
+            "Behavioral questions that can be asked in the interview along with their intentions and how to answer them."
         ),
 
     skillGap: z
@@ -77,17 +76,17 @@ const interviewReportSchema = z.object({
             z.object({
                 skill: z
                     .string()
-                    .describe("The skill which teh candidate is lacking"),
+                    .describe("The skill which the candidate is lacking"),
 
                 severity: z
                     .enum(["low", "medium", "high"])
                     .describe(
-                        "The severity of this skill gap , i.e how important it is  "
+                        "The severity of this skill gap."
                     ),
             })
         )
         .describe(
-            "List of skil gaps in the candidate's profile along with their severity"
+            "List of skill gaps in the candidate's profile along with their severity."
         ),
 
     preparationPlan: z
@@ -96,13 +95,13 @@ const interviewReportSchema = z.object({
                 day: z
                     .number()
                     .describe(
-                        "The day number in the preparation plan , start from 1"
+                        "The day number in the preparation plan starting from 1."
                     ),
 
                 focus: z
                     .string()
                     .describe(
-                        "The main focus of thi sday int he preparation plan , e.g data structures , system design , mock interviews effectively "
+                        "The main focus of the day in the preparation plan."
                     ),
 
                 tasks: z
@@ -110,12 +109,12 @@ const interviewReportSchema = z.object({
                         z.string()
                     )
                     .describe(
-                        "List of task to be done ont his day to folow the preparation plan , e.g. read a specific book or follow a particular roadmap"
+                        "List of tasks to be completed on this day."
                     ),
             })
         )
         .describe(
-            "A say-wise preparation plan for the candidate to follow in oder to preapre dor the interview effectively "
+            "A day-wise preparation plan for the candidate."
         ),
 });
 
@@ -124,26 +123,42 @@ async function generateInterviewReport({
     selfDescription,
     jobDescription,
 }) {
-    const prompt = `Generate an interview report for a candidate with the following details :
-Resume:${resume}
-Self Description:${selfDescription}
-Job Description:${jobDescription}
+    try {
+        const prompt = `
+You are an expert technical interviewer.
+
+Analyze the following candidate profile and generate a complete interview report.
+
+Resume:
+${resume}
+
+Self Description:
+${selfDescription}
+
+Job Description:
+${jobDescription}
+
+Return ONLY valid JSON matching the provided schema.
 `;
 
-    const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
-        contents: prompt,
-        config: {
-            responseMimeType: "application/json",
-            responseJsonSchema: zodToJsonSchema(interviewReportSchema),
-        },
-    });
+        const response = await ai.models.generateContent({
+            model: "gemini-3.5-flash",
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseJsonSchema: zodToJsonSchema(interviewReportSchema),
+            },
+        });
 
-    const report = (response.text);
+        const report = JSON.parse(response.text);
 
-    console.log(report);
+        console.log(report);
 
-    return report;
+        return report;
+    } catch (err) {
+        console.error("Interview Report Error:", err);
+        throw err;
+    }
 }
 
 module.exports = {
