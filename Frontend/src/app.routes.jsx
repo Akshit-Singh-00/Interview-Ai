@@ -4,6 +4,8 @@ import Login from "./features/auth/pages/Login";
 import Register from "./features/auth/pages/Register";
 import Protected from "./features/auth/components/Protected";
 
+import Home from "./features/ai/pages/Home";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -19,6 +21,10 @@ export const router = createBrowserRouter([
   },
   {
     path: "/home",
-    element:<Protected> <h1>Home Page</h1></Protected>,
-  },
+    element: (
+        <Protected>
+            <Home />
+        </Protected>
+    ),
+},
 ]);
