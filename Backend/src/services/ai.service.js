@@ -139,7 +139,7 @@ Job Description:${jobDescription}
         },
     });
 
-    const report = JSON.parse(response.text);
+    const report = (response.text);
 
     console.log(report);
 
