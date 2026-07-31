@@ -156,9 +156,12 @@ Return ONLY valid JSON matching the provided schema.
 
         return report;
     } catch (err) {
-        console.error("Interview Report Error:", err);
-        throw err;
-    }
+    console.error("Interview Report Error:", err);
+
+    throw new Error(
+        "AI service is temporarily unavailable. Please try again in a few minutes."
+    );
+}
 }
 
 module.exports = {
