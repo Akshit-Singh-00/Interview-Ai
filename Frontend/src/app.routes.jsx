@@ -5,16 +5,9 @@ import Register from "./features/auth/pages/Register";
 import Protected from "./features/auth/components/Protected";
 
 import Home from "./features/ai/pages/Home";
+import Report from "./features/ai/pages/Report";
 
 export const router = createBrowserRouter([
-  {
-    path: "/report",
-    element: (
-        <Protected>
-            <Report />
-        </Protected>
-    ),
-},
   {
     path: "/",
     element: <Navigate to="/login" replace />,
@@ -30,10 +23,17 @@ export const router = createBrowserRouter([
   {
     path: "/home",
     element: (
-        <Protected>
-            <Home />
-        </Protected>
+      <Protected>
+        <Home />
+      </Protected>
     ),
-},
-
+  },
+  {
+    path: "/report",
+    element: (
+      <Protected>
+        <Report />
+      </Protected>
+    ),
+  },
 ]);

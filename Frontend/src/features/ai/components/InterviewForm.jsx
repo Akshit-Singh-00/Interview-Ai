@@ -7,7 +7,6 @@ import GenerateButton from "./GenerateButton";
 
 import { useNavigate } from "react-router-dom";
 import useAI from "../hooks/useAI";
-
 import useInterview from "../hooks/useInterview";
 
 export default function InterviewForm() {
@@ -16,6 +15,9 @@ export default function InterviewForm() {
     const [jobDescription, setJobDescription] = useState("");
 
     const { loading, generate } = useInterview();
+
+    const navigate = useNavigate();
+    const { setReport } = useAI();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,16 +29,18 @@ export default function InterviewForm() {
                 jobDescription,
             });
 
-            console.log(response);
+            // Save the report in Context
+            setReport(response.interview);
 
-            alert("Interview Report Generated Successfully");
+            // Navigate to report page
+            navigate("/report");
         } catch (err) {
             console.error(err);
 
             alert(
                 err.response?.data?.message ||
-                    err.message ||
-                    "Something went wrong."
+                err.message ||
+                "Something went wrong."
             );
         }
     };
