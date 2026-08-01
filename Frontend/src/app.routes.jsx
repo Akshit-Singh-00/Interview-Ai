@@ -8,6 +8,14 @@ import Home from "./features/ai/pages/Home";
 
 export const router = createBrowserRouter([
   {
+    path: "/report",
+    element: (
+        <Protected>
+            <Report />
+        </Protected>
+    ),
+},
+  {
     path: "/",
     element: <Navigate to="/login" replace />,
   },
@@ -27,4 +35,5 @@ export const router = createBrowserRouter([
         </Protected>
     ),
 },
+
 ]);

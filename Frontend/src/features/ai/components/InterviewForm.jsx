@@ -5,6 +5,9 @@ import SelfDescriptionInput from "./SelfDescriptionInput";
 import JobDescriptionInput from "./JobDescriptionInput";
 import GenerateButton from "./GenerateButton";
 
+import { useNavigate } from "react-router-dom";
+import useAI from "../hooks/useAI";
+
 import useInterview from "../hooks/useInterview";
 
 export default function InterviewForm() {
