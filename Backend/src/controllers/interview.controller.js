@@ -1,5 +1,8 @@
-const { generateInterviewReport } = require("../services/ai.service");
-const InterviewReport = require("../models/interviewReport.model");
+const InterviewReport = require("../models/interviewreport.model");
+
+const {
+    generateInterviewReport,
+} = require("../services/ai.service");
 
 exports.generateInterview = async (req, res) => {
     try {
@@ -15,14 +18,16 @@ exports.generateInterview = async (req, res) => {
             });
         }
 
+        console.log("========== REQUEST DATA ==========");
+        console.log("Resume:", resume);
+        console.log("Self Description:", selfDescription);
+        console.log("Job Description:", jobDescription);
+
         const report = await generateInterviewReport({
             resume,
             selfDescription,
             jobDescription,
         });
-
-        console.log("========== AI REPORT ==========");
-        console.log(report);
 
         const interview = await InterviewReport.create({
             user: req.user.id,
@@ -31,10 +36,6 @@ exports.generateInterview = async (req, res) => {
             jobDescription,
             ...report,
         });
-
-        console.log("========== SAVED DOCUMENT ==========");
-        console.log("Sending response:");
-        console.log(interview);
 
         res.status(201).json({
             success: true,
