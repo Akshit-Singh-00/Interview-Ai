@@ -1,122 +1,17 @@
 const { GoogleGenAI } = require("@google/genai");
-const { z } = require("zod");
-const { zodToJsonSchema } = require("zod-to-json-schema");
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY,
 });
 
 async function invokeGeminiAi(prompt) {
-    try {
-        const response = await ai.models.generateContent({
-            model: "gemini-3.5-flash",
-            contents: prompt,
-        });
+    const response = await ai.models.generateContent({
+        model: "gemini-3.5-flash",
+        contents: prompt,
+    });
 
-        return response.text;
-    } catch (err) {
-        console.error("Gemini Error:", err.message);
-        throw err;
-    }
+    return response.text;
 }
-
-const interviewReportSchema = z.object({
-    matchScore: z
-        .number()
-        .describe(
-            "A score between 0 & 100 indicating how well the candidate's profile matches the job description"
-        ),
-
-    technicalQuestions: z
-        .array(
-            z.object({
-                question: z
-                    .string()
-                    .describe("The technical question can be asked in the interview"),
-
-                intention: z
-                    .string()
-                    .describe("The intention of the interviewer behind asking this question"),
-
-                answer: z
-                    .string()
-                    .describe(
-                        "How to answer this question, what points to cover and what approach to take."
-                    ),
-            })
-        )
-        .describe(
-            "Technical questions that can be asked in the interview along with their intentions and how to answer them."
-        ),
-
-    behavioralQuestions: z
-        .array(
-            z.object({
-                question: z
-                    .string()
-                    .describe("The behavioral question that can be asked in the interview"),
-
-                intention: z
-                    .string()
-                    .describe("The intention of the interviewer behind asking this question"),
-
-                answer: z
-                    .string()
-                    .describe(
-                        "How to answer this question, what points to cover and what approach to take."
-                    ),
-            })
-        )
-        .describe(
-            "Behavioral questions that can be asked in the interview along with their intentions and how to answer them."
-        ),
-
-    skillGap: z
-        .array(
-            z.object({
-                skill: z
-                    .string()
-                    .describe("The skill which the candidate is lacking"),
-
-                severity: z
-                    .enum(["low", "medium", "high"])
-                    .describe(
-                        "The severity of this skill gap."
-                    ),
-            })
-        )
-        .describe(
-            "List of skill gaps in the candidate's profile along with their severity."
-        ),
-
-    preparationPlan: z
-        .array(
-            z.object({
-                day: z
-                    .number()
-                    .describe(
-                        "The day number in the preparation plan starting from 1."
-                    ),
-
-                focus: z
-                    .string()
-                    .describe(
-                        "The main focus of the day in the preparation plan."
-                    ),
-
-                tasks: z
-                    .array(
-                        z.string()
-                    )
-                    .describe(
-                        "List of tasks to be completed on this day."
-                    ),
-            })
-        )
-        .describe(
-            "A day-wise preparation plan for the candidate."
-        ),
-});
 
 async function generateInterviewReport({
     resume,
@@ -125,9 +20,63 @@ async function generateInterviewReport({
 }) {
     try {
         const prompt = `
-You are an expert technical interviewer.
+You are an expert Technical Interviewer and Career Coach.
 
-Analyze the following candidate profile and generate a complete interview report.
+Analyze the candidate carefully.
+
+Return ONLY valid JSON.
+
+Do NOT return markdown.
+Do NOT wrap JSON inside \`\`\`.
+Do NOT explain anything.
+
+The JSON format MUST be:
+
+{
+  "matchScore": 85,
+  "technicalQuestions": [
+    {
+      "question": "",
+      "intention": "",
+      "answer": ""
+    }
+  ],
+  "behavioralQuestions": [
+    {
+      "question": "",
+      "intention": "",
+      "answer": ""
+    }
+  ],
+  "skillGap": [
+    {
+      "skill": "",
+      "severity": "low"
+    }
+  ],
+  "preparationPlan": [
+    {
+      "day": 1,
+      "focus": "",
+      "tasks": [
+        "",
+        "",
+        ""
+      ]
+    }
+  ]
+}
+
+Rules:
+
+- matchScore must be between 0 and 100.
+- Generate exactly 5 technical questions.
+- Generate exactly 5 behavioral questions.
+- Generate exactly 5 skill gaps.
+- Generate a preparation plan for 7 days.
+- Every day's tasks should contain 3 items.
+- Never return empty arrays.
+- Every answer should be detailed.
 
 Resume:
 ${resume}
@@ -137,31 +86,26 @@ ${selfDescription}
 
 Job Description:
 ${jobDescription}
-
-Return ONLY valid JSON matching the provided schema.
 `;
 
         const response = await ai.models.generateContent({
             model: "gemini-3.5-flash",
             contents: prompt,
-            config: {
-                responseMimeType: "application/json",
-                responseJsonSchema: zodToJsonSchema(interviewReportSchema),
-            },
         });
+
+        console.log("========== RAW GEMINI RESPONSE ==========");
+        console.log(response.text);
 
         const report = JSON.parse(response.text);
 
+        console.log("========== PARSED REPORT ==========");
         console.log(report);
 
         return report;
     } catch (err) {
-    console.error("Interview Report Error:", err);
-
-    throw new Error(
-        "AI service is temporarily unavailable. Please try again in a few minutes."
-    );
-}
+        console.error("Interview Report Error:", err);
+        throw new Error("Failed to generate interview report.");
+    }
 }
 
 module.exports = {

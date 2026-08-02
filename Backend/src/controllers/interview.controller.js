@@ -33,6 +33,7 @@ exports.generateInterview = async (req, res) => {
         });
 
         console.log("========== SAVED DOCUMENT ==========");
+        console.log("Sending response:");
         console.log(interview);
 
         res.status(201).json({
