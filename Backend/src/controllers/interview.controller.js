@@ -1,4 +1,3 @@
-
 const { generateInterviewReport } = require("../services/ai.service");
 const InterviewReport = require("../models/interviewReport.model");
 
@@ -22,13 +21,19 @@ exports.generateInterview = async (req, res) => {
             jobDescription,
         });
 
-       const interview = await InterviewReport.create({
-    user: req.user.id,
-    resume,
-    selfDescription,
-    jobDescription,
-    ...report,
-});
+        console.log("========== AI REPORT ==========");
+        console.log(report);
+
+        const interview = await InterviewReport.create({
+            user: req.user.id,
+            resume,
+            selfDescription,
+            jobDescription,
+            ...report,
+        });
+
+        console.log("========== SAVED DOCUMENT ==========");
+        console.log(interview);
 
         res.status(201).json({
             success: true,
