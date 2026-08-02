@@ -28,7 +28,8 @@ export default function InterviewForm() {
                 selfDescription,
                 jobDescription,
             });
-
+            console.log("API Response:", response);
+            console.log("Interview:", response.interview);
             // Save the report in Context
             setReport(response.interview);
 
