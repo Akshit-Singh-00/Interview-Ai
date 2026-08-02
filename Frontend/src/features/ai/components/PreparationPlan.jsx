@@ -1,27 +1,20 @@
-export default function PreparationPlan({
-    plan,
-}) {
+export default function PreparationPlan({ plan }) {
+    console.log("PLAN:", plan);
+
     return (
         <div>
             <h2>Preparation Plan</h2>
 
-            {plan.map((day) => (
-                <div key={day.day}>
-                    <h3>Day {day.day}</h3>
+            {plan.map((item, index) => {
+                console.log(item);
 
-                    <h4>{day.focus}</h4>
-
-                    <ul>
-                        {day.tasks.map((task, index) => (
-                            <li key={index}>
-                                {task}
-                            </li>
-                        ))}
-                    </ul>
-
-                    <hr />
-                </div>
-            ))}
+                return (
+                    <div key={index}>
+                        <pre>{JSON.stringify(item, null, 2)}</pre>
+                        <hr />
+                    </div>
+                );
+            })}
         </div>
     );
 }

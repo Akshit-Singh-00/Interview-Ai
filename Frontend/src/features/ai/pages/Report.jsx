@@ -1,49 +1,69 @@
 import useAI from "../hooks/useAI";
 
-import MatchScore from "../components/MatchScore";
-import TechnicalQuestions from "../components/TechnicalQuestions";
-import BehavioralQuestions from "../components/BehavioralQuestions";
-import SkillGap from "../components/SkillGap";
-import PreparationPlan from "../components/PreparationPlan";
-
 export default function Report() {
     const { report } = useAI();
-    console.log(report);
+
+    console.log("REPORT", report);
 
     if (!report) {
-        return (
-            <div style={{ padding: "40px" }}>
-                <h2>No Report Found</h2>
-                <p>Please generate an interview report first.</p>
-            </div>
-        );
+        return <h1>No Report</h1>;
     }
-
+    console.log(report.preparationPlan);
     return (
-        <div
-            style={{
-                maxWidth: "1000px",
-                margin: "40px auto",
-                padding: "20px",
-            }}
-        >
+        <div style={{ padding: "40px" }}>
             <h1>Interview Report</h1>
 
-            <MatchScore score={report.matchScore} />
+            <h2>Match Score</h2>
+            <p>{report.matchScore}</p>
 
-            <TechnicalQuestions
-                questions={report.technicalQuestions}
-            />
+            <h2>Technical Questions</h2>
 
-            <BehavioralQuestions
-                questions={report.behavioralQuestions}
-            />
+            {report.technicalQuestions.map((q, i) => (
+                <div
+                    key={i}
+                    style={{
+                        border: "2px solid red",
+                        margin: "20px 0",
+                        padding: "20px",
+                    }}
+                >
+                    <h3>{q.question}</h3>
+                    <p>{q.intention}</p>
+                    <p>{q.answer}</p>
+                </div>
+            ))}
 
-            <SkillGap skills={report.skillGap} />
+            <h2>Behavioral Questions</h2>
 
-            <PreparationPlan
-                plan={report.preparationPlan}
-            />
+            {report.behavioralQuestions.map((q, i) => (
+                <div
+                    key={i}
+                    style={{
+                        border: "2px solid blue",
+                        margin: "20px 0",
+                        padding: "20px",
+                    }}
+                >
+                    <h3>{q.question}</h3>
+                </div>
+            ))}
+
+            <h2>Skill Gap</h2>
+
+            {report.skillGap.map((s, i) => (
+                <div key={i}>
+                    {s.skill} - {s.severity}
+                </div>
+            ))}
+
+            <h2>Preparation Plan</h2>
+
+            {report.preparationPlan.map((d) => (
+                <div key={d.day}>
+                    <h3>Day {d.day}</h3>
+                    <p>{d.focus}</p>
+                </div>
+            ))}
         </div>
     );
 }

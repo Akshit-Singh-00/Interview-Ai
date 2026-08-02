@@ -1,4 +1,4 @@
-export default function SkillGap({ skills }) {
+export default function SkillGap({ skills = [] }) {
     return (
         <div>
             <h2>Skill Gap</h2>
@@ -6,7 +6,6 @@ export default function SkillGap({ skills }) {
             {skills.map((skill, index) => (
                 <div key={index}>
                     <h3>{skill.skill}</h3>
-
                     <p>{skill.severity}</p>
                 </div>
             ))}

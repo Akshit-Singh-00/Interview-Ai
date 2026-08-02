@@ -1,25 +1,22 @@
-export default function BehavioralQuestions({
-    questions,
-}) {
+export default function BehavioralQuestions({ questions = [] }) {
     return (
         <div>
             <h2>Behavioral Questions</h2>
 
             {questions.map((q, index) => (
-                <div key={index}>
+                <div
+                    key={index}
+                    style={{
+                        border: "1px solid white",
+                        padding: "15px",
+                        marginBottom: "20px",
+                    }}
+                >
                     <h3>{q.question}</h3>
 
-                    <p>
-                        <strong>Why asked:</strong>{" "}
-                        {q.intention}
-                    </p>
+                    <p><b>Why asked:</b> {q.intention}</p>
 
-                    <p>
-                        <strong>How to answer:</strong>{" "}
-                        {q.answer}
-                    </p>
-
-                    <hr />
+                    <p><b>Answer:</b> {q.answer}</p>
                 </div>
             ))}
         </div>
