@@ -8,6 +8,7 @@ import PreparationPlan from "../components/PreparationPlan";
 
 export default function Report() {
     const { report } = useAI();
+    console.log(report);
 
     if (!report) {
         return (
