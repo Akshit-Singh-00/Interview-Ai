@@ -63,9 +63,9 @@ const skillGapSchema = new mongoose.Schema(
 // Preparation Plan Schema
 const preparationPlanSchema = new mongoose.Schema(
   {
-    day: {
+    week: {
       type: Number,
-      required: [true, "Day is required"],
+      required: [true, "Week is required"],
     },
     focus: {
       type: String,

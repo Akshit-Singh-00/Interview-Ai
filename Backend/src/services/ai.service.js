@@ -56,7 +56,7 @@ The JSON format MUST be:
   ],
   "preparationPlan": [
     {
-      "day": 1,
+      "week": 1,
       "focus": "",
       "tasks": [
         "",
@@ -68,13 +68,12 @@ The JSON format MUST be:
 }
 
 Rules:
-
 - matchScore must be between 0 and 100.
 - Generate exactly 5 technical questions.
 - Generate exactly 5 behavioral questions.
 - Generate exactly 5 skill gaps.
-- Generate a preparation plan for 7 days.
-- Every day's tasks should contain 3 items.
+- Generate exactly 8 weeks in preparationPlan.
+- Every week must contain exactly 3 practical tasks.
 - Never return empty arrays.
 - Every answer should be detailed.
 
