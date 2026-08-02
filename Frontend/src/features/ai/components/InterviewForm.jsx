@@ -19,32 +19,33 @@ export default function InterviewForm() {
     const navigate = useNavigate();
     const { setReport } = useAI();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+   const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        try {
-            const response = await generate({
-                resume,
-                selfDescription,
-                jobDescription,
-            });
-            console.log("API Response:", response);
-            console.log("Interview:", response.interview);
-            // Save the report in Context
-            setReport(response.interview);
+    console.log("Resume:", resume);
+    console.log("Self Description:", selfDescription);
+    console.log("Job Description:", jobDescription);
 
-            // Navigate to report page
-            navigate("/report");
-        } catch (err) {
-            console.error(err);
+    try {
+        const response = await generate({
+            resume,
+            selfDescription,
+            jobDescription,
+        });
 
-            alert(
-                err.response?.data?.message ||
-                err.message ||
-                "Something went wrong."
-            );
-        }
-    };
+        setReport(response.interview);
+
+        navigate("/report");
+    } catch (err) {
+        console.error(err);
+
+        alert(
+            err.response?.data?.message ||
+            err.message ||
+            "Something went wrong."
+        );
+    }
+};
 
     return (
         <form onSubmit={handleSubmit}>

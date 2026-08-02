@@ -1,34 +1,44 @@
 import useAI from "../hooks/useAI";
+import "../../../style/report.scss";
 
 export default function Report() {
     const { report } = useAI();
 
-    console.log("REPORT", report);
-
     if (!report) {
-        return <h1>No Report</h1>;
+        return (
+            <div className="report-page">
+                <h1>No Report Found</h1>
+            </div>
+        );
     }
-    console.log(report.preparationPlan);
+
     return (
-        <div style={{ padding: "40px" }}>
+        <div className="report-page">
             <h1>Interview Report</h1>
 
-            <h2>Match Score</h2>
-            <p>{report.matchScore}</p>
+            <div className="match-score-card">
+                <h2>Match Score</h2>
+                <div className="score-circle">
+                    {report.matchScore}%
+                </div>
+            </div>
 
             <h2>Technical Questions</h2>
 
             {report.technicalQuestions.map((q, i) => (
-                <div
-                    key={i}
-                    style={{
-                        border: "2px solid red",
-                        margin: "20px 0",
-                        padding: "20px",
-                    }}
-                >
+                <div className="question-card" key={i}>
                     <h3>{q.question}</h3>
+
+                    <p>
+                        <strong>Why asked</strong>
+                    </p>
+
                     <p>{q.intention}</p>
+
+                    <p>
+                        <strong>How to answer</strong>
+                    </p>
+
                     <p>{q.answer}</p>
                 </div>
             ))}
@@ -36,32 +46,51 @@ export default function Report() {
             <h2>Behavioral Questions</h2>
 
             {report.behavioralQuestions.map((q, i) => (
-                <div
-                    key={i}
-                    style={{
-                        border: "2px solid blue",
-                        margin: "20px 0",
-                        padding: "20px",
-                    }}
-                >
+                <div className="question-card" key={i}>
                     <h3>{q.question}</h3>
+
+                    <p>
+                        <strong>Why asked</strong>
+                    </p>
+
+                    <p>{q.intention}</p>
+
+                    <p>
+                        <strong>How to answer</strong>
+                    </p>
+
+                    <p>{q.answer}</p>
                 </div>
             ))}
 
             <h2>Skill Gap</h2>
 
-            {report.skillGap.map((s, i) => (
-                <div key={i}>
-                    {s.skill} - {s.severity}
-                </div>
-            ))}
+            <div className="skill-grid">
+                {report.skillGap.map((s, i) => (
+                    <div className="skill-card" key={i}>
+                        <h3>{s.skill}</h3>
+                        <span className={s.severity}>
+                            {s.severity.toUpperCase()}
+                        </span>
+                    </div>
+                ))}
+            </div>
 
             <h2>Preparation Plan</h2>
 
-            {report.preparationPlan.map((d) => (
-                <div key={d.day}>
-                    <h3>Day {d.day}</h3>
-                    <p>{d.focus}</p>
+            {report.preparationPlan.map((week, i) => (
+                <div className="week-card" key={i}>
+                    <h3>
+                        Week {week.week ?? week.day}
+                    </h3>
+
+                    <h4>{week.focus}</h4>
+
+                    <ul>
+                        {week.tasks?.map((task, index) => (
+                            <li key={index}>{task}</li>
+                        ))}
+                    </ul>
                 </div>
             ))}
         </div>
