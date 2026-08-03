@@ -1,5 +1,4 @@
-const InterviewReport = require("../models/interviewreport.model");
-
+const InterviewReport = require("../models/interviewReport.model");
 const {
     generateInterviewReport,
 } = require("../services/ai.service");
