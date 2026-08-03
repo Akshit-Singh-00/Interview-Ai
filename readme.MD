@@ -4,12 +4,6 @@ An AI-powered Interview Preparation Platform that helps users prepare for techni
 
 ---
 
-## 🌐 Live Demo
-
-Coming Soon (Deployment in Progress)
-
----
-
 ## Features
 
 - User Registration & Login (JWT Authentication)
@@ -80,3 +74,11 @@ DELETE /api/interview/:id
 - Dark/Light Theme
 - AI Mock Interview
 - Email Report Sharing
+
+---
+
+## 🌐 Live Demo
+
+Coming Soon (Deployment in Progress)
+
+---
