@@ -19,7 +19,7 @@ An AI-powered Interview Preparation Platform that helps users prepare for techni
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 ### Frontend
 - React.js
