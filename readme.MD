@@ -77,7 +77,7 @@ DELETE /api/interview/:id
 
 ---
 
-## 🌐 Live Demo
+##  Live Demo
 
 Coming Soon (Deployment in Progress)
 
